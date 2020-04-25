@@ -28,4 +28,4 @@
 
 > 스크린샷(과제1,2)
 
-![work](./img/work1.png)
+![work](./work1.png)
