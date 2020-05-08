@@ -1,7 +1,8 @@
-package com.dev.helloworld
+package com.dev.helloworld.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.dev.helloworld.R
 
 class SomeActivity : AppCompatActivity() {
 

@@ -1,9 +1,10 @@
-package com.dev.helloworld
+package com.dev.helloworld.ui.signup
 
 import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.dev.helloworld.R
 import kotlinx.android.synthetic.main.activity_sign_up.*
 
 class SignUpActivity : AppCompatActivity() {
