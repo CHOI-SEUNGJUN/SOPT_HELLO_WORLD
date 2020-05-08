@@ -9,7 +9,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.dev.helloworld.api.NetworkRepository
 import com.dev.helloworld.model.request.SignInRequest
-import com.dev.helloworld.ui.SomeActivity
+import com.dev.helloworld.ui.some.SomeActivity
 import com.dev.helloworld.util.shortToast
 import javax.inject.Inject
 

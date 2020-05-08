@@ -4,16 +4,12 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.dev.helloworld.R
 import com.dev.helloworld.databinding.ActivitySignInBinding
-import com.dev.helloworld.model.request.SignInRequest
 import com.dev.helloworld.ui.BaseActivity
-import com.dev.helloworld.ui.SomeActivity
 import com.dev.helloworld.ui.signup.SignUpActivity
-import com.dev.helloworld.util.shortToast
 import kotlinx.android.synthetic.main.activity_sign_in.*
 import javax.inject.Inject
 
