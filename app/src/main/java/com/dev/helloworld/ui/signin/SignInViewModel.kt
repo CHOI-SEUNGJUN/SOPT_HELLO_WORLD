@@ -45,4 +45,9 @@ class SignInViewModel @Inject constructor(
         )
     }
 
+    fun getInfoFromSignUp(id: String, pw: String) {
+        _id.value = id
+        _pw.value = pw
+    }
+
 }

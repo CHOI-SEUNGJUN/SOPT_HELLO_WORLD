@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.dev.helloworld.api.NetworkRepository
 import com.dev.helloworld.ui.signin.SignInViewModel
+import com.dev.helloworld.ui.signup.SignUpViewModel
 import com.dev.helloworld.util.ViewModelFactory
 import dagger.Binds
 import dagger.MapKey
@@ -28,4 +29,9 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(SignInViewModel::class)
     abstract fun provideSignInModel(signInViewModel: SignInViewModel) : ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(SignUpViewModel::class)
+    abstract fun provideSignUpModel(signUpViewModel: SignUpViewModel) : ViewModel
 }

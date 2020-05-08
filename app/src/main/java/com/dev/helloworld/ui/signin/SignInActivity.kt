@@ -38,37 +38,18 @@ class SignInActivity : BaseActivity() {
 
     private fun initButton() {
         btnSignUp.setOnClickListener {
-            startActivityForResult(Intent(this, SignUpActivity::class.java),
-                GOGOSIGNUP
-            )
+            startActivityForResult(Intent(this, SignUpActivity::class.java), GOGOSIGNUP)
         }
-
-        /*btnSignIn.setOnClickListener {
-
-            viewModel.postSignIn(
-                data = SignInRequest(edtId.text.toString(), edtPassword.text.toString()),
-                onSuccess = {
-                    startActivity(Intent(this, SomeActivity::class.java))
-                    finish()
-                },
-                onFailure = { msg ->
-                    shortToast(msg)
-                }
-            )
-
-
-        }*/
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK) {
-            edtId.setText(data?.getStringExtra("id"))
-            edtPassword.setText(data?.getStringExtra("pw"))
+            viewModel.getInfoFromSignUp(data?.getStringExtra("id")!!, data.getStringExtra("pw")!!)
         }
     }
 
-    companion object {
+    private companion object {
         const val GOGOSIGNUP = 1020
     }
 }
