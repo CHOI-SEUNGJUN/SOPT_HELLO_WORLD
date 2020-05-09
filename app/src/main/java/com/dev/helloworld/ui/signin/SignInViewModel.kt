@@ -7,34 +7,51 @@ import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.dev.helloworld.api.NetworkRepository
+import androidx.lifecycle.viewModelScope
+import com.dev.helloworld.api.NetworkClient
 import com.dev.helloworld.model.request.SignInRequest
 import com.dev.helloworld.ui.some.SomeActivity
 import com.dev.helloworld.util.shortToast
+import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
-class SignInViewModel @Inject constructor(
-                      val repository : NetworkRepository)
+class SignInViewModel @Inject constructor()
     : ViewModel() {
 
-    val _id = MutableLiveData<String>()
-    val _pw = MutableLiveData<String>()
+    val _id: MutableLiveData<String> = MutableLiveData()
+    val id: LiveData<String> = _id
 
-    val id : LiveData<String> = _id
-    val pw : LiveData<String> = _pw
+    val _pw: MutableLiveData<String> = MutableLiveData()
+    val pw: LiveData<String> = _pw
 
-    fun postSignIn(v: View) {
+    private val _isSuccess: MutableLiveData<Boolean> = MutableLiveData()
+    val isSuccess: LiveData<Boolean> = _isSuccess
+
+    fun postSignIn() {
         if (id.value == null || pw.value == null) return
 
-        val context = v.context
+        viewModelScope.launch {
+            kotlin.runCatching {
+                NetworkClient.apiService.postSignIn(
+                    request = SignInRequest(id.value!!, pw.value!!)
+                )
+            }.onSuccess {
+                _isSuccess.value = true
+            }.onFailure {
+                Timber.e(it)
+                _isSuccess.value = false
+            }
+        }
 
-        repository.postSignIn(
+
+
+
+
+        /*repository.postSignIn(
             request = SignInRequest(id.value!!, pw.value!!),
             onSuccess = {
-                Intent(context, SomeActivity::class.java)
-                    .apply { addFlags(FLAG_ACTIVITY_NEW_TASK) }
-                    .run { context.startActivity(this) }
-                (context as Activity).finish()
+
             },
             onFailure = { msg ->
                 context.shortToast(msg)
@@ -42,7 +59,7 @@ class SignInViewModel @Inject constructor(
             onError = {
                 context.shortToast("네트워크 연결 실패")
             }
-        )
+        )*/
     }
 
     fun getInfoFromSignUp(id: String, pw: String) {

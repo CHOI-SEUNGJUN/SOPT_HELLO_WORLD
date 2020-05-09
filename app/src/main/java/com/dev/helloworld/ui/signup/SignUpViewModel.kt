@@ -7,47 +7,45 @@ import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.dev.helloworld.api.NetworkRepository
+import androidx.lifecycle.viewModelScope
+import com.dev.helloworld.api.NetworkClient
 import com.dev.helloworld.model.request.SignUpRequest
-import com.dev.helloworld.util.longToast
 import com.dev.helloworld.util.shortToast
+import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
-class SignUpViewModel @Inject constructor(
-    val repository: NetworkRepository
-) : ViewModel() {
+class SignUpViewModel @Inject constructor() : ViewModel() {
 
-    val _id = MutableLiveData<String>()
-    val _pw = MutableLiveData<String>()
     val _name = MutableLiveData<String>()
     val _email = MutableLiveData<String>()
     val _phone = MutableLiveData<String>()
 
-    val id : LiveData<String> = _id
-    val pw : LiveData<String> = _pw
-    val name : LiveData<String> = _name
-    val email : LiveData<String> = _email
-    val phone : LiveData<String> = _phone
+    val _id: MutableLiveData<String> = MutableLiveData()
+    val id: LiveData<String> = _id
 
-    fun postSignUp(v: View) {
-        if (id.value == null || pw.value == null || name.value == null ||
-                email.value == null || phone.value == null) return
+    val _pw: MutableLiveData<String> = MutableLiveData()
+    val pw: LiveData<String> = _pw
 
-        val context = v.context
+    private val _isSuccess: MutableLiveData<Boolean> = MutableLiveData()
+    val isSuccess: LiveData<Boolean> = _isSuccess
 
-        repository.postSignUp(
-            SignUpRequest(id.value!!, pw.value!!, name.value!!, email.value!!, phone.value!!),
-            onSuccess = {
-                val intent = Intent().apply {
-                    putExtra("id", id.value!!)
-                    putExtra("pw", pw.value!!)
-                }
-                (context as Activity).setResult(RESULT_OK, intent)
-                context.finish()
-            },
-            onFailure = { msg -> context.shortToast(msg) },
-            onError = { context.longToast("네트워크 연결 실패")}
-        )
+    fun postSignUp() {
+        if (_id.value == null || _pw.value == null || _name.value == null ||
+            _email.value == null || _phone.value == null) return
+
+        viewModelScope.launch {
+            kotlin.runCatching {
+                NetworkClient.apiService.postSignUp(
+                    SignUpRequest(id.value!!, pw.value!!, _name.value!!, _email.value!!, _phone.value!!)
+                )
+            }.onSuccess {
+                _isSuccess.value = true
+            }.onFailure {
+                Timber.e(it.toString())
+                _isSuccess.value = false
+            }
+        }
     }
 
 }
