@@ -25,29 +25,17 @@ object NetworkClient {
     private val commonNetworkInterceptor = object : Interceptor {
         override fun intercept(chain: Interceptor.Chain): Response {
 
-            /**
-             * 1) Common Header with API Access Token
-             */
             val newRequest = chain.request().newBuilder()
                 .build()
 
             Timber.e("${newRequest.method} - ${newRequest.url} \n{\n\t${newRequest.body?.toString()}\n}\n" )
 
-            /**
-             * 2) General Response from Server (Unwrapping data)
-             */
             val response = chain.proceed(newRequest)
 
-            /**
-             * 3) Parse body to json
-             */
             val rawJson = response.body?.string() ?: "{}"
 
             Timber.e(rawJson)
 
-            /**
-             * 4) Wrap body with gson
-             */
             val type = object : TypeToken<BaseResponse<*>>() {}.type
             val res = try {
                 val r = gson.fromJson<BaseResponse<*>>(rawJson, type) ?: throw JsonSyntaxException("Parse Fail")
@@ -63,15 +51,8 @@ object NetworkClient {
                 BaseResponse<Any>(-999, false, "unknown error : $t", null)
             }
 
-
-            /**
-             * 5) get data json from data
-             */
             val dataJson = gson.toJson(res.data)
 
-            /**
-             * 6) return unwrapped response with body
-             */
             return response.newBuilder()
                 .message(res.message)
                 .body(dataJson.toResponseBody())
