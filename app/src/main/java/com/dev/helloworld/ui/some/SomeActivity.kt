@@ -6,15 +6,18 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentPagerAdapter
 import androidx.viewpager.widget.ViewPager
 import com.dev.helloworld.R
+import com.dev.helloworld.ui.BaseActivity
 import kotlinx.android.synthetic.main.activity_some.*
 
-class SomeActivity : AppCompatActivity() {
+class SomeActivity : BaseActivity() {
 
     private val fragments = listOf(HomeFragment(), BookFragment(), PersonFragment())
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        appComponent.inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_some)
+
         initViewPager()
         interlockViewPagerAndNavigation()
     }

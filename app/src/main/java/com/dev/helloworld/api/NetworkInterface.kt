@@ -11,9 +11,9 @@ import retrofit2.http.POST
 interface NetworkInterface {
 
     @POST(Endpoints.signIn)
-    fun postSignIn(@Body request: SignInRequest) : Call<BaseResponse<SignInResponse>>
+    suspend fun postSignIn(@Body request: SignInRequest) : SignInResponse?
 
     @POST(Endpoints.signUp)
-    fun postSignUp(@Body request: SignUpRequest) : Call<BaseResponse<Any?>>
+    suspend fun postSignUp(@Body request: SignUpRequest)
 
 }

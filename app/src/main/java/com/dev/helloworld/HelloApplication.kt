@@ -4,7 +4,7 @@ import android.app.Application
 import com.dev.helloworld.di.AppComponent
 import com.dev.helloworld.di.ApplicationModule
 import com.dev.helloworld.di.DaggerAppComponent
-import com.dev.helloworld.di.NetworkModule
+import timber.log.Timber
 
 open class HelloApplication : Application() {
 
@@ -12,11 +12,18 @@ open class HelloApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        initComponent()
+        initLogger()
+    }
 
+    private fun initComponent() {
         appComponent = DaggerAppComponent.builder()
-            .networkModule(NetworkModule())
             .applicationModule(ApplicationModule(this))
             .build()
-
     }
+
+    private fun initLogger() {
+        Timber.plant(Timber.DebugTree())
+    }
+
 }
